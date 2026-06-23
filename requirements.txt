@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+pymongo
+pika
+kafka-python
+pytest
+httpx
+mongomock
