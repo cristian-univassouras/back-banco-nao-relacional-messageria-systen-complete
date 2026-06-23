@@ -1,7 +1,7 @@
 from app.models.order import OrderEventType
 
 
-def test_delete_order_removes_it(api):
+async def test_delete_order_removes_it(api):
     client, repo, _publishers = api
     created = client.post(
         "/orders",
@@ -11,7 +11,7 @@ def test_delete_order_removes_it(api):
     response = client.delete(f"/orders/{created['id']}")
 
     assert response.status_code == 204
-    assert repo.get_by_id(created["id"]) is None
+    assert await repo.get_by_id(created["id"]) is None
 
 
 def test_delete_order_publishes_deleted_event(api):

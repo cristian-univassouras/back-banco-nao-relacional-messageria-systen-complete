@@ -15,7 +15,7 @@ def test_create_order_returns_201_with_pendente_status(api):
     assert body["id"]
 
 
-def test_create_order_persists_and_publishes_created_event(api):
+async def test_create_order_persists_and_publishes_created_event(api):
     client, repo, publishers = api
 
     response = client.post(
@@ -24,7 +24,7 @@ def test_create_order_persists_and_publishes_created_event(api):
     )
     order_id = response.json()["id"]
 
-    assert repo.get_by_id(order_id) is not None
+    assert await repo.get_by_id(order_id) is not None
     for publisher in publishers:
         assert publisher.published[-1][1] == OrderEventType.CREATED
 
