@@ -48,6 +48,78 @@ app/
 └── main.py
 ```
 
+Estrutura completa do projeto:
+
+```
+.
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── Dockerfile
+├── README.md
+├── docker-compose.yml
+├── pyproject.toml
+├── requirements.txt
+├── app/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── dependencies.py
+│   ├── main.py
+│   ├── models/
+│   │   ├── __init__.py
+│   │   └── order.py
+│   ├── publishers/
+│   │   ├── __init__.py
+│   │   ├── event_publisher.py
+│   │   ├── kafka_publisher.py
+│   │   └── rabbitmq_publisher.py
+│   ├── repositories/
+│   │   ├── __init__.py
+│   │   ├── mongo_order_repository.py
+│   │   └── order_repository.py
+│   ├── routers/
+│   │   ├── __init__.py
+│   │   └── order_router.py
+│   ├── schemas/
+│   │   ├── __init__.py
+│   │   └── order.py
+│   └── services/
+│       ├── __init__.py
+│       └── order_service.py
+└── tests/
+    ├── __init__.py
+    ├── conftest.py
+    ├── api/
+    │   ├── __init__.py
+    │   ├── test_order_create.py
+    │   ├── test_order_delete.py
+    │   ├── test_order_get.py
+    │   ├── test_order_list.py
+    │   └── test_order_update.py
+    ├── fakes/
+    │   ├── __init__.py
+    │   ├── fake_event_publisher.py
+    │   ├── fake_order_repository.py
+    │   ├── test_fake_event_publisher.py
+    │   └── test_fake_order_repository.py
+    ├── models/
+    │   ├── __init__.py
+    │   └── test_order.py
+    ├── publishers/
+    │   ├── __init__.py
+    │   ├── test_kafka_publisher.py
+    │   └── test_rabbitmq_publisher.py
+    ├── repositories/
+    │   ├── __init__.py
+    │   └── test_mongo_order_repository.py
+    ├── schemas/
+    │   ├── __init__.py
+    │   └── test_order_schemas.py
+    └── services/
+        ├── __init__.py
+        └── test_order_service.py
+```
+
 ## Como executar
 
 Requer [Docker](https://www.docker.com/) e Docker Compose instalados.
