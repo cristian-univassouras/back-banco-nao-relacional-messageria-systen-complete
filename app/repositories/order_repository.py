@@ -7,21 +7,21 @@ from app.models.order import Order, OrderStatus
 
 class OrderRepository(ABC):
     @abstractmethod
-    def save(self, order: Order) -> None:
+    async def save(self, order: Order) -> None:
         raise NotImplementedError
 
     @abstractmethod
-    def list_all(self) -> list[Order]:
+    async def list_all(self) -> list[Order]:
         raise NotImplementedError
 
     @abstractmethod
-    def get_by_id(self, order_id: str) -> Order | None:
+    async def get_by_id(self, order_id: str) -> Order | None:
         raise NotImplementedError
 
     @abstractmethod
-    def update_status(self, order_id: str, status: OrderStatus) -> Order:
+    async def update_status(self, order_id: str, status: OrderStatus) -> Order:
         raise NotImplementedError
 
     @abstractmethod
-    def delete(self, order_id: str) -> None:
+    async def delete(self, order_id: str) -> None:
         raise NotImplementedError
