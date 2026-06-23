@@ -9,7 +9,7 @@ class KafkaPublisher(EventPublisher):
         self._producer = producer
         self._topic = topic
 
-    def publish(self, order: Order, event_type: OrderEventType) -> None:
+    async def publish(self, order: Order, event_type: OrderEventType) -> None:
         message = {
             "event_type": event_type.value,
             "order_id": order.id,
@@ -18,5 +18,6 @@ class KafkaPublisher(EventPublisher):
             "quantity": order.quantity,
             "status": order.status.value,
         }
-        self._producer.send(self._topic, json.dumps(message).encode("utf-8"))
-        self._producer.flush()
+        await self._producer.send_and_wait(
+            self._topic, json.dumps(message).encode("utf-8")
+        )
