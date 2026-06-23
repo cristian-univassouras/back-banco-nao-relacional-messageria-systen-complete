@@ -14,15 +14,15 @@ def get_order_repository(request: Request) -> OrderRepository:
     return MongoOrderRepository(collection)
 
 
-def get_event_publishers(request: Request) -> list[EventPublisher]:
-    channel = request.app.state.rabbitmq_connection.channel()
-    rabbitmq_publisher = RabbitMQPublisher(channel)
+async def get_event_publishers(request: Request) -> list[EventPublisher]:
+    channel = await request.app.state.rabbitmq_connection.channel()
+    rabbitmq_publisher = await RabbitMQPublisher.create(channel)
     kafka_publisher = KafkaPublisher(request.app.state.kafka_producer)
     return [rabbitmq_publisher, kafka_publisher]
 
 
-def get_order_service(request: Request) -> OrderService:
+async def get_order_service(request: Request) -> OrderService:
     return OrderService(
         get_order_repository(request),
-        get_event_publishers(request),
+        await get_event_publishers(request),
     )
