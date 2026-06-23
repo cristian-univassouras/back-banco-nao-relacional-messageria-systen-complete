@@ -16,7 +16,7 @@ de eventos em RabbitMQ e Kafka.
 
 ## Sobre o projeto
 
-Trabalho acadêmico (Banco de Dados Não Relacional — Universidade Vassouras)
+Prova acadêmica - P2 (Banco de Dados Não Relacional — Universidade Vassouras)
 que simula a modernização de parte da arquitetura de pedidos de um
 e-commerce: persistência em um banco NoSQL e comunicação assíncrona com
 sistemas externos via mensageria.
