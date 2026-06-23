@@ -31,10 +31,11 @@ quanto no Kafka.
 ## Arquitetura
 
 Camadas com inversão de dependência: `Router → Service → Repository/Publisher`.
-`OrderRepository` e `EventPublisher` são interfaces abstratas — a camada de
-serviço nunca importa `pymongo`/`pika`/`kafka-python` diretamente, apenas as
-implementações concretas (`MongoOrderRepository`, `RabbitMQPublisher`,
-`KafkaPublisher`) as conhecem.
+`OrderRepository` e `EventPublisher` são interfaces abstratas (com métodos
+`async def`) — a camada de serviço nunca importa `motor`/`aio-pika`/`aiokafka`
+diretamente, apenas as implementações concretas (`MongoOrderRepository`,
+`RabbitMQPublisher`, `KafkaPublisher`) as conhecem. Todo o I/O de rede
+(MongoDB, RabbitMQ, Kafka) é assíncrono e não-bloqueante de ponta a ponta.
 
 ```
 app/
@@ -80,8 +81,9 @@ pip install -r requirements.txt
 pytest -v
 ```
 
-45 testes, todos usando fakes em memória para o repositório e os publishers
-— não dependem de MongoDB, RabbitMQ ou Kafka rodando.
+45 testes (rodando via `pytest-asyncio`), todos usando fakes em memória para o
+repositório e os publishers — não dependem de MongoDB, RabbitMQ ou Kafka
+rodando.
 
 ## Stack
 
