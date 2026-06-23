@@ -88,5 +88,5 @@ pytest -v
 - **API:** FastAPI + Pydantic v2
 - **Persistência:** MongoDB (`motor`, assíncrono)
 - **Mensageria:** RabbitMQ (`aio-pika`) e Kafka (`aiokafka`), ambos assíncronos
-- **Testes:** Pytest, `httpx` (TestClient), `mongomock`
+- **Testes:** Pytest, `pytest-asyncio`, `httpx` (TestClient), `mongomock-motor`
 - **Conteinerização:** Docker + Docker Compose
