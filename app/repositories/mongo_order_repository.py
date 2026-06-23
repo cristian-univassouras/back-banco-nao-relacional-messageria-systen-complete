@@ -1,14 +1,14 @@
 from __future__ import annotations
 
+from motor.motor_asyncio import AsyncIOMotorCollection
 from pymongo import ReturnDocument
-from pymongo.collection import Collection
 
 from app.models.order import Order, OrderNotFound, OrderStatus
 from app.repositories.order_repository import OrderRepository
 
 
 class MongoOrderRepository(OrderRepository):
-    def __init__(self, collection: Collection) -> None:
+    def __init__(self, collection: AsyncIOMotorCollection) -> None:
         self._collection = collection
 
     @staticmethod
@@ -31,18 +31,18 @@ class MongoOrderRepository(OrderRepository):
             status=OrderStatus(document["status"]),
         )
 
-    def save(self, order: Order) -> None:
-        self._collection.insert_one(self._to_document(order))
+    async def save(self, order: Order) -> None:
+        await self._collection.insert_one(self._to_document(order))
 
-    def list_all(self) -> list[Order]:
-        return [self._to_order(doc) for doc in self._collection.find()]
+    async def list_all(self) -> list[Order]:
+        return [self._to_order(doc) async for doc in self._collection.find()]
 
-    def get_by_id(self, order_id: str) -> Order | None:
-        document = self._collection.find_one({"_id": order_id})
+    async def get_by_id(self, order_id: str) -> Order | None:
+        document = await self._collection.find_one({"_id": order_id})
         return self._to_order(document) if document else None
 
-    def update_status(self, order_id: str, status: OrderStatus) -> Order:
-        document = self._collection.find_one_and_update(
+    async def update_status(self, order_id: str, status: OrderStatus) -> Order:
+        document = await self._collection.find_one_and_update(
             {"_id": order_id},
             {"$set": {"status": status.value}},
             return_document=ReturnDocument.AFTER,
@@ -51,7 +51,7 @@ class MongoOrderRepository(OrderRepository):
             raise OrderNotFound(order_id)
         return self._to_order(document)
 
-    def delete(self, order_id: str) -> None:
-        result = self._collection.delete_one({"_id": order_id})
+    async def delete(self, order_id: str) -> None:
+        result = await self._collection.delete_one({"_id": order_id})
         if result.deleted_count == 0:
             raise OrderNotFound(order_id)
