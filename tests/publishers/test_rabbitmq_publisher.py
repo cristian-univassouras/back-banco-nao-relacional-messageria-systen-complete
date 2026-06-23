@@ -1,30 +1,34 @@
 import json
-from unittest.mock import MagicMock
+from unittest.mock import AsyncMock, MagicMock
 
 from app.models.order import Order, OrderEventType
 from app.publishers.rabbitmq_publisher import RabbitMQPublisher
 
 
-def test_publish_declares_queue_on_init():
+async def test_create_declares_queue():
     channel = MagicMock()
+    channel.declare_queue = AsyncMock()
 
-    RabbitMQPublisher(channel, queue_name="orders")
+    await RabbitMQPublisher.create(channel, queue_name="orders")
 
-    channel.queue_declare.assert_called_once_with(queue="orders", durable=True)
+    channel.declare_queue.assert_called_once_with("orders", durable=True)
 
 
-def test_publish_sends_json_payload_with_order_identification():
+async def test_publish_sends_json_payload_with_order_identification():
     channel = MagicMock()
-    publisher = RabbitMQPublisher(channel, queue_name="orders")
+    channel.declare_queue = AsyncMock()
+    channel.default_exchange = MagicMock()
+    channel.default_exchange.publish = AsyncMock()
+    publisher = await RabbitMQPublisher.create(channel, queue_name="orders")
     order = Order.create("Maria", "Teclado", 2)
 
-    publisher.publish(order, OrderEventType.CREATED)
+    await publisher.publish(order, OrderEventType.CREATED)
 
-    channel.basic_publish.assert_called_once()
-    _, kwargs = channel.basic_publish.call_args
-    assert kwargs["exchange"] == ""
+    channel.default_exchange.publish.assert_called_once()
+    args, kwargs = channel.default_exchange.publish.call_args
+    message = args[0]
     assert kwargs["routing_key"] == "orders"
-    payload = json.loads(kwargs["body"])
+    payload = json.loads(message.body)
     assert payload == {
         "event_type": "CREATED",
         "order_id": order.id,
