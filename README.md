@@ -1,6 +1,6 @@
 <div align="center">
 
-# Order Management API
+# API de Gerenciamento de Pedidos
 
 API para gerenciamento de pedidos com persistência em MongoDB e publicação
 de eventos em RabbitMQ e Kafka.
@@ -19,9 +19,7 @@ de eventos em RabbitMQ e Kafka.
 Trabalho acadêmico (Banco de Dados Não Relacional — Universidade Vassouras)
 que simula a modernização de parte da arquitetura de pedidos de um
 e-commerce: persistência em um banco NoSQL e comunicação assíncrona com
-sistemas externos via mensageria. O enunciado completo está em
-[`CONTEXTO.md`](CONTEXTO.md); o racional de arquitetura está em
-[`docs/superpowers/specs/2026-06-23-order-management-api-design.md`](docs/superpowers/specs/2026-06-23-order-management-api-design.md).
+sistemas externos via mensageria.
 
 Cada pedido tem: id único, nome do cliente, nome do produto, quantidade e
 status (inicia sempre como `PENDENTE`). Ao criar, atualizar o status ou
@@ -85,7 +83,20 @@ pytest -v
 repositório e os publishers — não dependem de MongoDB, RabbitMQ ou Kafka
 rodando.
 
-## Stack
+## Variáveis de ambiente
+
+Copie `.env.example` para `.env` se quiser rodar a API localmente (fora do
+Docker), apontando para os serviços expostos pelo `docker-compose` ou
+rodando localmente nas mesmas portas:
+
+```bash
+cp .env.example .env
+```
+
+Dentro do `docker-compose up`, as variáveis já são definidas direto no
+`docker-compose.yml` — o `.env` não é necessário nesse fluxo.
+
+## Tecnologias
 
 - **API:** FastAPI + Pydantic v2
 - **Persistência:** MongoDB (`motor`, assíncrono)
