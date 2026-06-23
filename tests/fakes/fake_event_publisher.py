@@ -8,5 +8,5 @@ class FakeEventPublisher(EventPublisher):
     def __init__(self) -> None:
         self.published: list[tuple[Order, OrderEventType]] = []
 
-    def publish(self, order: Order, event_type: OrderEventType) -> None:
+    async def publish(self, order: Order, event_type: OrderEventType) -> None:
         self.published.append((order, event_type))
