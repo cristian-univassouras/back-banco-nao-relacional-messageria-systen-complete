@@ -2,9 +2,10 @@ fastapi
 uvicorn[standard]
 pydantic
 pydantic-settings
-pymongo
-pika
-kafka-python
+motor
+aio-pika
+aiokafka
 pytest
 httpx
-mongomock
+mongomock-motor
+pytest-asyncio
